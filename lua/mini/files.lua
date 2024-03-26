@@ -1491,8 +1491,14 @@ H.explorer_update_cursors = function(explorer)
   for _, win_id in ipairs(explorer.windows) do
     if H.is_valid_win(win_id) then
       local buf_id = vim.api.nvim_win_get_buf(win_id)
-      local path = H.opened_buffers[buf_id].path
-      explorer.views[path].cursor = vim.api.nvim_win_get_cursor(win_id)
+      local buffer = H.opened_buffers[buf_id]
+      if buffer and buffer.path then
+        local path = buffer.path
+        local view = explorer.views[path]
+        if view then
+          view.cursor = vim.api.nvim_win_get_cursor(win_id)
+        end
+      end
     end
   end
 
